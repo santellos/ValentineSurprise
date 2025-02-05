@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Quieres ser mi San Valentín?</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            background: linear-gradient(to bottom, #6236FF, #FF6699);
+            font-family: 'Press Start 2P', cursive;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .window {
+            background: #FFCC99;
+            border: 4px solid #000;
+            width: 480px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 5px 5px 0px #000;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .title-bar {
+            background: #FFD700;
+            padding: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        button {
+            background: #FF6699;
+            color: white;
+            padding: 15px;
+            border: 2px solid black;
+            font-size: 16px;
+            cursor: pointer;
+            font-family: inherit;
+            position: relative;
+        }
+
+        #no-btn {
+            background: #999;
+            position: absolute;
+            transition: left 0.3s ease, top 0.3s ease;
+        } 
+
+        #prize-container {
+            background: #FFCC99;
+            border: 4px solid #000;
+            width: 420px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 5px 5px 0px #000;
+            border-radius: 8px;
+            position: relative;
+            display: none;
+        }
+
+        #video-container {
+            background: #FFCC99;
+            border: 4px solid #000;
+            width: 420px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 5px 5px 0px #000;
+            border-radius: 8px;
+            position: relative;
+            display: none;
+        }
+
+        video {
+            width: 100%;
+            max-height: 480px;
+            border-radius: 8px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }     
+
+        #love-message {
+            text-align: center;
+            background: #FFCC99;
+            padding: 30px;
+            border-radius: 10px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 5px 5px 0px black;
+            width: 500px;
+            height: 600px;
+            display: none;
+        }
+
+        .carousel {
+            height: 350px !important;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel .carousel-item {
+            width: 70% !important;
+            height: 90% !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel .carousel-item img {
+            width: auto !important;
+            height: 100% !important;
+            max-height: 100% !important;
+            object-fit: cover !important;
+            display: block;
+            margin: auto;
+        }
+
+        .carousel .indicators {
+            bottom: -20px;
+            text-align: center;
+        }
+
+        #game-container {
+            background: #FFCC99;
+            padding: 30px;
+            border-radius: 10px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 5px 5px 0px black;
+            width: 500px;
+            height: 600px;
+            display: none;
+            flex-direction: column;
+        }
+
+        #game-canvas {
+            background: url('fondo.jpeg'); /* Imagen de fondo con nubecitas */
+            background-size: contain; /* Se adapta sin recortar */
+            background-repeat: no-repeat;
+            background-position: center;
+            margin: auto;
+            border: 4px solid black;
+            box-shadow: 5px 5px 0px black;
+            display: none;
+            text-align: center;
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #game-container span {
+            margin-top: auto; 
+            padding-bottom: 10px; 
+            font-size: 11px;
+            text-align: center;
+        }
+
+        #game-title {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center; 
+            padding-top: 3px; 
+            font-size: 20px;
+        }
+
+        #game-over {
+            display: none;
+            background: white;
+            border: 4px solid black;
+            box-shadow: 5px 5px 0px black;
+            padding: 20px;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+        }
+
+        #final-score {
+            font-size: 18px !important; 
+        }
+
+        #prize-video {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="window" id="question-container">
+        <div class="title-bar">
+            <span>Love.exe</span>
+        </div>
+        <div class="content">
+            <p>Laura Sofia Morales Vaerewyck, ¿acaso tú quieres ser mi San Valentín? 💖</p>
+            <div class="buttons-container">
+                <button id="yes-btn">Sí 💕</button>
+                <button id="no-btn" style="position: relative;">No ❌</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="video-container">
+        <div class="title-bar">
+            <span>Love.exe</span>
+        </div>
+        <video id="romantic-video" controls>
+            <source src="video.mp4" type="video/mp4">
+        </video>
+        <button id="continue-btn">Continuar</button>
+    </div>
+
+    <div id="love-message">
+        <div class="title-bar">
+            <span>Love.exe</span>
+        </div>
+        <p>Más que San Valentín, quiero compartir el resto de mi vida contigo 💘 Je t'aime 💘</p>
+        <div class="carousel">
+            <a class="carousel-item" href="#"><img src="img1.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img2.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img3.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img4.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img5.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img6.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img7.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img8.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img9.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img10.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img11.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img12.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img13.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img14.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img15.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img16.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img17.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img18.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img19.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img20.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img21.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img22.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img23.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img24.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img25.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img26.jpeg"></a>
+            <a class="carousel-item" href="#"><img src="img27.jpeg"></a>
+        </div>
+        <audio id="background-music" loop>
+            <source src="song.mp3" type="audio/mp3">
+        </audio>
+        <button id="go-game">Da click para jugar 🧩</button>
+    </div>
+
+    <div id="game-container">
+        <div class="title-bar">
+            <span>Love.exe</span>
+        </div>
+        <p id="game-title">Attrape les frites!🍟</p>
+        <canvas id="game-canvas" width="380" height="380"></canvas>    
+        <span>Muévete con las flechas de tu teclado  ◀️▶️ </span>  
+        <div id="game-over">
+            <h6>¡Felicidades, ganaste! 🎉</h6>
+            <p>Tu puntaje fue: <span id="final-score"></span></p>
+            <button id="collect-prize">¡Dale click para recoger tu premio!</button>
+        </div>
+        <audio id="game-music" loop>
+            <source src="gamesong.mp3" type="audio/mp3">
+        </audio>
+    </div>
+
+    <div id="prize-container">
+        <div class="title-bar">
+            <span>Love.exe</span>
+        </div>
+        <video id="prize-video" controls>
+            <source src="prizevideo.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const noBtn = document.getElementById("no-btn");
+            const yesBtn = document.getElementById("yes-btn");
+            const goGame = document.getElementById("go-game");
+            const questionContainer = document.getElementById("question-container");
+            const videoContainer = document.getElementById("video-container");
+            const prizeVideoContainer = document.getElementById("prize-container");
+            const gameContainer = document.getElementById("game-container");
+            const canvas = document.getElementById("game-canvas");
+            const romanticVideo = document.getElementById("romantic-video");
+            const continueBtn = document.getElementById("continue-btn");
+            const loveMessage = document.getElementById("love-message");
+            const gameMusic = document.getElementById("game-music");
+            const music = document.getElementById("background-music");
+            let carouselElems = document.querySelectorAll('.carousel');
+            const characterImg = new Image();
+            characterImg.src = "./image.png"; 
+            const friesImg = new Image();
+            friesImg.src = "./frites.png";
+            const gameOverScreen = document.getElementById("game-over");
+            const finalScoreText = document.getElementById("final-score");
+            const collectPrizeButton = document.getElementById("collect-prize");
+            const prizeVideo = document.getElementById("prize-video");
+            
+            
+            let positions = [
+                {left: "-200px", top: "120%"},
+                {left: "80%", top: "175%"},
+                {left: "-140%", top: "150%"},
+                {left: "125%", top: "80%"},
+                {left: "-180%", top: "80%"},
+                {left: "170%", top: "80%"},
+            ];
+            let index = 0;
+
+            document.addEventListener("mousemove", function(event) {
+                const noBtnRect = noBtn.getBoundingClientRect();
+                const distance = Math.hypot(event.clientX - (noBtnRect.left + noBtnRect.width / 2), 
+                                            event.clientY - (noBtnRect.top + noBtnRect.height / 2));
+
+                if (distance < 80) {
+                    isMoving = true;
+                    noBtn.style.left = positions[index].left;
+                    noBtn.style.top = positions[index].top;
+                    index = (index + 1) % positions.length;
+                    
+                    setTimeout(() => { isMoving = false; }, 300);
+                }
+            });
+
+            yesBtn.addEventListener("click", function() {
+                questionContainer.style.display = "none";
+                videoContainer.style.display = "block";
+                romanticVideo.play();
+            });
+
+            continueBtn.addEventListener("click", function() {
+                videoContainer.style.display = "none";
+                loveMessage.style.display = "block";
+                music.play();
+                let instance = M.Carousel.init(carouselElems, {
+                    fullWidth: true,
+                    indicators: true,
+                    duration: 300,
+                    interval: 3000
+                });
+                setInterval(() => {
+                    let instance = M.Carousel.getInstance(carouselElems[0]);
+                    instance.next();
+                }, 3000);
+            });
+
+            goGame.addEventListener("click", function() {
+                music.pause();
+                gameMusic.play();
+                loveMessage.style.display = "none";
+                gameContainer.style.display = "flex";
+                canvas.style.display = "block";
+                const ctx = canvas.getContext("2d");
+               
+                
+                let player = {
+                    x: (canvas.width - 60) / 2, 
+                    y: canvas.height - 94,      
+                    width: 100,
+                    height: 100,
+                    speed: 20
+                };
+                let fries = [];
+                let score = 0;
+                let gameRunning = true;
+                
+                function drawPlayer() {
+                    ctx.drawImage(characterImg, player.x, player.y, player.width, player.height);
+                }
+                
+                function drawFries() {
+                    fries.forEach(fry => {
+                        ctx.drawImage(friesImg, fry.x, fry.y, 60, 60);
+                    });
+                }
+                
+                function updateFries() {
+                    fries.forEach((fry, index) => {
+                        fry.y += 5;
+                        if (fry.y > canvas.height) fries.splice(index, 1);
+                        if (fry.y + 40 >= player.y && fry.x >= player.x && fry.x <= player.x + player.width) {
+                            fries.splice(index, 1);
+                            score++;
+                            if (score >= 20) {
+                                endGame();
+                            }
+                        }
+                    });
+                }
+                
+                function generateFries() {
+                    if (Math.random() < 0.05) {
+                        fries.push({ x: Math.random() * (canvas.width - 40), y: 0 });
+                    }
+                }
+                
+                function drawScore() {
+                    ctx.fillStyle = "black";
+                    ctx.font = "20px 'Press Start 2P'";
+                    ctx.fillText("Score: " + score, 20, 40);
+                }
+                
+                function gameLoop() {
+                    if (!gameRunning) return;
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawPlayer();
+                    drawFries();
+                    updateFries();
+                    generateFries();
+                    drawScore();
+                    requestAnimationFrame(gameLoop);
+                }
+                
+                function endGame() {
+                    gameMusic.pause();
+                    gameRunning = false;
+                    gameOverScreen.style.display = "block";
+                    finalScoreText.textContent = score;
+                }
+                
+                collectPrizeButton.addEventListener("click", function() {
+                    gameOverScreen.style.display = "none";
+                });
+                
+                document.addEventListener("keydown", (event) => {
+                    if (event.key === "ArrowLeft" && player.x > 0) {
+                        player.x -= player.speed;
+                    }
+                    if (event.key === "ArrowRight" && player.x < canvas.width - player.width) {
+                        player.x += player.speed;
+                    }
+                });
+                
+                gameLoop();
+            });
+
+            collectPrizeButton.addEventListener("click", function() {
+                gameContainer.style.display = "none";
+                canvas.style.display = "none";
+                prizeVideoContainer.style.display = "block";
+                prizeVideo.style.display = "block";
+                prizeVideo.play();
+            });
+        });
+    </script>
+</body>
+</html>
